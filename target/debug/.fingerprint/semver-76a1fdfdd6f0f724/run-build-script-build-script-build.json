@@ -1,0 +1,1 @@
+{"rustc":12610991425282158916,"features":"","declared_features":"","target":0,"profile":0,"path":0,"deps":[[4899080583175475170,"build_script_build",false,17241608291051346573]],"local":[{"RerunIfChanged":{"output":"debug/build/semver-76a1fdfdd6f0f724/output","paths":["build.rs"]}}],"rustflags":["-Lall=/Users/woyo/Documents/rust/dylibs"],"config":0,"compile_kind":0}

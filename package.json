@@ -1,0 +1,19 @@
+{
+  "name": "ecdh-x25519-wasm",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "ecdh",
+    "x25519"
+  ],
+  "license": "ISC",
+  "author": "kira.x",
+  "type": "module",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

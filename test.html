@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lib WASM Demo</title>
+</head>
+<body>
+    <script type="module">
+        import init, { share_key } from "./out/ecdh.js";
+        init().then(() => {
+            console.log(share_key());
+        });
+    </script>
+</body>
+</html>
