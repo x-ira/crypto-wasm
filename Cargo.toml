@@ -2,6 +2,10 @@
 name = "ecdh"
 version = "0.1.0"
 edition = "2024"
+description = "A wasm package, using curve25519"
+repository = "https://github.com/x-ira/ecdh-x25519-wasm.git"
+license = "MIT OR Apache-2.0"
+keywords = ["x25519", "ecdh"]
 
 [lib]
 crate-type = ["cdylib", "rlib"]
