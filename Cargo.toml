@@ -1,29 +1,32 @@
 [package]
-name = "ecdh"
-version = "0.1.0"
+name = "crypto_wasm"
+version = "1.0.3"
 edition = "2024"
-description = "A wasm package, using curve25519"
+description = "A crypto wasm package, including x25519, blake3"
 repository = "https://github.com/x-ira/ecdh-x25519-wasm.git"
-license = "MIT OR Apache-2.0"
-keywords = ["x25519", "ecdh"]
+license = "MIT"
+license-file = "LICENSE-MIT"
+keywords = ["x25519", "ecdh", "wasm", "blake3"]
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [features]
-default = ["console_error_panic_hook"]
+# default = ["console_error_panic_hook"]
 
 [dependencies]
-console_error_panic_hook = { version = "0.1.7", optional = true }
-js-sys = "0.3.77"
+# console_error_panic_hook = { version = "0.1.7", optional = true }
+# js-sys = "0.3.77"
 wasm-bindgen = "0.2.100"
 wee_alloc = { version = "0.4.5", optional = true }
 getrandom = { version = "0.2.16", features = ["js"] }
 x25519-dalek = { version = "2", features = ["getrandom", "static_secrets"] }
 base64ct = { version = "*", features = ["alloc"] }
+blake3 = "1.8.2"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.13"
 
 [profile.release]
+lto = true
 opt-level = "s"
