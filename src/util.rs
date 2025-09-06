@@ -19,6 +19,7 @@ pub enum CryptoErr{
     DecodeBase64Err(String),
     SignatureErr(String),
     EcdsaErr(String),
+    CipherErr(String),
 }
 impl From<Error> for CryptoErr{
     fn from(value: Error) -> Self {
@@ -28,6 +29,16 @@ impl From<Error> for CryptoErr{
 impl From<TryFromSliceError> for CryptoErr{
     fn from(err: TryFromSliceError) -> Self {
         Self::InvalidKey(err.to_string())
+    }
+}
+impl From<chacha20poly1305::aead::Error> for CryptoErr{
+    fn from(err: chacha20poly1305::aead::Error) -> Self {
+        Self::CipherErr(err.to_string())
+    }
+}
+impl From<rand_core::OsError> for CryptoErr {
+    fn from(err: rand_core::OsError) -> Self {
+        Self::CipherErr(err.to_string())
     }
 }
 impl Display for CryptoErr {

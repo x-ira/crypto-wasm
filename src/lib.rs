@@ -1,4 +1,5 @@
 pub mod util;
+pub mod cipher;
 
 use base64ct::{Base64, Encoding};
 use ed25519_dalek::{ed25519::signature::AsyncSigner, Signature, SigningKey, Verifier, VerifyingKey};
@@ -6,7 +7,7 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::js_sys::Uint8Array;
 use x25519_dalek::{EphemeralSecret, PublicKey};
 
-use crate::util::{b64_to_bytes, CryptoErr, CryptoResult};
+use crate::{cipher::AeadCipher, util::{b64_to_bytes, CryptoErr, CryptoResult}};
 
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
@@ -71,6 +72,25 @@ impl Ecdsa {
     }
 }
 
+#[wasm_bindgen]
+pub struct Cipher(AeadCipher);
+
+#[wasm_bindgen]
+impl Cipher {
+    #[wasm_bindgen(constructor)]
+    pub fn init(key: &[u8]) -> CryptoResult<Self> {
+        let key_arr: [u8;32] = key.as_ref().try_into()?;
+        Ok(Self(AeadCipher::from_key(&key_arr)))
+    }
+    pub fn encrypt(&self, data: &[u8]) -> CryptoResult<Box<[u8]>> {
+        self.0.encrypt_bytes(data).map(|r| r.into())   // Uint8Array::from(r.as_slice())
+    }
+    pub fn decrypt(&self, enc_data: &[u8], nonce_len: usize) -> CryptoResult<Box<[u8]>> {
+        let nonce = &enc_data[..nonce_len];
+        let cipher_data = &enc_data[nonce_len..];
+        self.0.decrypt_bytes(nonce, cipher_data).map(|r| r.into())
+    }
+}
 #[wasm_bindgen]
 pub struct Ecdh {
     secret: EphemeralSecret,

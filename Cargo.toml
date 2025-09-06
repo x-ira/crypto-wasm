@@ -1,6 +1,6 @@
 [package]
 name = "xira-crypto-wasm"
-version = "1.0.4"
+version = "1.0.6"
 edition = "2024"
 description = "A crypto wasm package, including x25519, blake3"
 repository = "https://github.com/x-ira/crypto-wasm.git"
@@ -29,6 +29,7 @@ rand = { version = "0.9.2", features = ["os_rng"] }
 getrandom = { version = "0.3", features = ["wasm_js"] }
 x25519-dalek = { version = "3.0.0-pre.0", features = ["os_rng"] }
 ed25519-dalek = { version = "3.0.0-pre.0", features = ["rand_core"] }
+chacha20poly1305 = { version = "0.11.0-rc.1", features = [] }
 
 base64ct = { version = "*", features = ["alloc"] }
 blake3 = "1.8.2"
