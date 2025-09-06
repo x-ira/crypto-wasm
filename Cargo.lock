@@ -100,23 +100,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "crypto_wasm"
-version = "1.0.3"
-dependencies = [
- "base64ct",
- "blake3",
- "ed25519-dalek",
- "getrandom",
- "rand",
- "rand_core",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "wasm-bindgen-test",
- "wee_alloc",
- "x25519-dalek",
-]
-
-[[package]]
 name = "curve25519-dalek"
 version = "5.0.0-pre.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -672,6 +655,23 @@ dependencies = [
  "rand_core",
  "serde",
  "zeroize",
+]
+
+[[package]]
+name = "xira-crypto-wasm"
+version = "1.0.4"
+dependencies = [
+ "base64ct",
+ "blake3",
+ "ed25519-dalek",
+ "getrandom",
+ "rand",
+ "rand_core",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "wasm-bindgen-test",
+ "wee_alloc",
+ "x25519-dalek",
 ]
 
 [[package]]
