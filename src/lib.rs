@@ -5,7 +5,7 @@ use base64ct::{Base64, Encoding};
 use ed25519_dalek::{ed25519::signature::AsyncSigner, Signature, SigningKey, Verifier, VerifyingKey};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::js_sys::Uint8Array;
-use x25519_dalek::{EphemeralSecret, PublicKey};
+use x25519_dalek::{EphemeralSecret, PublicKey, StaticSecret};
 
 use crate::{cipher::AeadCipher, util::{b64_to_bytes, CryptoErr, CryptoResult}};
 
@@ -119,6 +119,44 @@ impl Ecdh {
     #[wasm_bindgen(getter)]
     pub fn pub_key(&self) -> Box<[u8]> {
         self.pub_key.as_ref().into()
+    }
+}
+#[wasm_bindgen]
+pub struct StaticEcdh {
+    secret: StaticSecret, //EphemeralSecret is good, but sometimes we have to serialize the secret.
+}
+#[wasm_bindgen]
+impl StaticEcdh {
+    #[wasm_bindgen(constructor)]
+    pub fn init() -> Self {
+        let secret = StaticSecret::random();
+        Self { secret }
+    }
+    pub fn to_bytes(&self) -> Box<[u8]>{
+        self.secret.to_bytes().into()
+    }
+    pub fn from_bytes(ecdh_bytes: &[u8]) -> CryptoResult<Self>{
+        let secret_arr: [u8;32] = ecdh_bytes.try_into()?;
+        let secret = StaticSecret::from(secret_arr);
+        Ok(Self { secret })
+    }
+    pub fn exchange(self, rival_pk: Box<[u8]>) -> CryptoResult<Box<[u8]>> {
+        let rival_pk_arr: [u8;32] = rival_pk.as_ref().try_into()?;
+        self.dh_share(rival_pk_arr)
+    }
+    fn dh_share(self, rival_pk_arr: [u8;32]) -> CryptoResult<Box<[u8]>> {
+        let rival_pub_key = PublicKey::from(rival_pk_arr);
+        let shared_key = self.secret.diffie_hellman(&rival_pub_key);
+        Ok(shared_key.as_ref().into())
+    }
+    pub fn exchange_b64(self, rival_pk_b64: &str) -> CryptoResult<Box<[u8]>> {
+        let rival_pk_arr = b64_to_bytes(rival_pk_b64)?;
+        self.dh_share(rival_pk_arr)
+    }
+    #[wasm_bindgen(getter)]
+    pub fn pub_key(&self) -> Box<[u8]> {
+        let pub_key = PublicKey::from(&self.secret);
+        pub_key.as_ref().into()
     }
 }
 
